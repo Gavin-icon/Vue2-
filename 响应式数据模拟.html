@@ -40,7 +40,7 @@
         custProto[method] = function() {
           // 让当前自定义的方法拥有Array的方法
           const result = Array.prototype[method].apply(this, arguments)
-          // 让视图更新
+          // 使用自定义数组方法后让数组变更后视图更新,this会返回数组本身
           app.textContent = this
           return result
         }
@@ -56,7 +56,7 @@
             // 重新定义一个vm实例对象，防止冲突
             vm[key] = {}
             // 递归 createReactive执行的是立即执行函数的return值，也就是当前被封装的函数
-            return createReactive(vm[key],data[key])
+            return createReactive(vm[key], data[key])
             // 返回，防止和下边的冲突
           }
 

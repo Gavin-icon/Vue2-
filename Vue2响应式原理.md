@@ -32,7 +32,7 @@
     arrMethodName.forEach(method => {
       custProto[method] = function(){
         const result = Array.prototype[method].apply(this, arguments)
-        4-3-1：实现视图更新
+        4-3-1：实现视图更新--下边这行代码的目的是使得数组数据变化后，视图对应更新，this代表的是返回的数组本身
           app.textContent = this?????
         return result
       }
@@ -48,7 +48,7 @@
           data[key].__proto__ = custProto
 
       } else if (typeof data[key] === 'object' && typeof data[key] !== null) {
-        5-1-1-b：如果是对象的话，我们让其递归
+        5-1-1-b：如果是对象的话，我们让其递归，此处必须是vm[key]，否则无法和vm建立联系，会导致vm读取不到该二次对象结构
           let vm[key] = {} ????????????
           createReactive(vm[key], data[key])
       }
