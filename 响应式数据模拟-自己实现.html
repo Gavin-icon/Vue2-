@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  响应式数据：<input type="text" id="test">
+  <script>
+    // 获取input框
+    var input = document.getElementById('test')
+    // 定义一个Vue中的响应式数据的集合
+    var data = {
+
+    }
+    var value = {
+      value1: ''
+    }
+    // 模拟响应式处理--数据驱动视图
+    Object.defineProperty(data, 'data1', {
+      get () {
+        // 响应式读取
+        input.onchange = function(){
+          value.value1 = input.value
+        }
+        input.value = value.value1
+        return value.value1
+      },
+      set (newValue) {
+        // 赋值
+        value.value1 = newValue
+        // 响应式
+        input.value = value.value1
+      }
+    })
+  </script>
+</body>
+</html>
