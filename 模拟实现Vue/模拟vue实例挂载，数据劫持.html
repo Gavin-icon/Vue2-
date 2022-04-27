@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <div id="app">
+    这是ms1的内容: {{ ms1 }}  这是ms2的内容: {{ ms2 }}
+    <p v-text="ms1" class="sos"></p>
+    <p class="demo">实例内容</p>
+  </div>
+  <script src="./js/Watcher.js"></script>
+  <script src="./js/Dep.js"></script>
+  <script src="./js/compiler.js"></script>
+  <script src="./js/Observer.js"></script>
+  <script src="./js/Vue.js"></script>
+  <script>
+    var vm = new Vue({
+      el: '#app',
+      data: {
+        ms1: '小和尚',
+        ms2: '大和尚',
+        arr1: [1,2,3,4],
+        obj: {
+          obj1: '空气',
+          obj2: '氧气'
+        }
+      }
+    })
+  </script>
+</body>
+</html>
