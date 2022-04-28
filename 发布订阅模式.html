@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>发布-订阅模式</title>
+</head>
+<body>
+  <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+  <script>
+    // 相当于借助eventBus事件总线，进行消息代理
+    const bus = new Vue()
+    // 消息中心bus
+    bus.$on('on-Change', () => {
+      console.log(1)
+    })
+    // 触发自定义事件
+    bus.$emit('on-Change')
+    // Publish   发布模式
+    // SubScriber 订阅模式
+    // Dep  消息中心 -- 相当于eventBus事件总线
+  </script>
+</body>
+</html>

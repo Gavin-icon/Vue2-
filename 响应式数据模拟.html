@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <div id="app">原始内容</div>
+  <script>
+    // 获取JavaScript对象
+    var app = document.querySelector('#app')
+    // 设置data
+    var data = {
+      data1: '',
+      data2: '',
+      arr: [1,2,3],
+      jks: {
+        jk: ''
+      }
+    }
+    // ↑↑↑↑↑↑↑--获取JavaScript对象并作为data选项
+    // 设置进行操作的vm对象，利用vm进行数据劫持
+    var vm = {}
+
+    // 设置递归,封装为单独的模块，自己封装的原型只需要被执行一次就可以了
+    const createReactive = (function(){
+      /* 针对Vue中vm实例对象无法对数据进行索引和length操作，但是可以进行其他数组操作的处理并使得视图更新 */
+      // 此处vm需要的Array方法
+      var arrMethodName = ['push', 'pop', 'unshift', 'shift', 'splice', 'sort']
+      // 存储一个自定义的原型对象，以修改调用者的指针指向 __proto__
+      var custProto = {}
+      // 为了防止修改指针指向后，无法使用数组的其他方法，还须让自定义对象指向数组原型
+      custProto.__proto__ = Array.prototype
+      // 使得自己自定义的arrMethod拥有数组的方法并被调用
+      arrMethodName.forEach(method => {
+        // console.log(method) --push、pop、.....
+        // custProto[method]就是method对应的值，也就是方法
+        custProto[method] = function() {
+          // 让当前自定义的方法拥有Array的方法
+          const result = Array.prototype[method].apply(this, arguments)
+          // 使用自定义数组方法后让数组变更后视图更新,this会返回数组本身
+          app.textContent = this
+          return result
+        }
+      })
+      return function(vm, data) {
+        // 遍历data中的属性
+        Object.keys(data).forEach(key => {
+          // 检测是否是数组，如果是数组，作出对应处理
+          if (Array.isArray(data[key])) {
+            // 是数组的话，我们需要修改数组的原型对象的指向，指向我们自定义的原型对象而不是Array
+            data[key].__proto__ = custProto
+          } else if (typeof data[key] === 'object' && typeof data[key] !== null) {
+            // 重新定义一个vm实例对象，防止冲突
+            vm[key] = {}
+            // 递归 createReactive执行的是立即执行函数的return值，也就是当前被封装的函数
+            return createReactive(vm[key], data[key])
+            // 返回，防止和下边的冲突
+          }
+
+          Object.defineProperty(vm, key, {
+            // 可以再次配置
+            configurable: true,
+            // 可以遍历
+            enumerable: true,
+            // 数据劫持
+            get () {
+              if (data[key] === '') {
+                data[key] = app.textContent
+              }
+              return data[key]
+            },
+            set (newValue) {
+              data[key] = newValue
+              app.textContent = data[key]
+            }
+          })
+        })
+      }
+    })()
+    
+    createReactive(vm, data)
+  </script>
+</body>
+</html>

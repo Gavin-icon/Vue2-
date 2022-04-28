@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>defineProperty介绍</title>
+</head>
+<body>
+  <p id="ds">1</p>
+  <script>
+    var obj = {
+      name: 'ls',
+      age: 10
+    }
+
+    // 自定义设置obj的属性及相关配置：读取、设置、遍历、configurable[再次设置]
+    // Object.defineProperty(obj, 'genter', {
+    //   value: 12,
+    //   // 通过Object.defineProperty定义的属性是否可以遍历
+    //   enumerable: true,
+    //   // 是否可被改动
+    //   writable: true,
+    //   // 是否可以再次定义属性,是否可以重新配置
+    //   configurable: true
+    // })
+    // Object.defineProperty(obj, 'genter', {
+    //   // enumerable: false
+    // })
+
+    // console.log(obj)
+    // console.log('-------------------------------')
+    // for(var k in obj) {
+    //   console.log(k + ":" + obj[k])
+    // }
+  
+    // get 与 set模式的Object.defineProperty()
+    // Object.defineProperty(obj, 'genter', {
+    //   get () {
+    //     console.log('自定义DOM操作都可以')
+    //     document.querySelector('#ds').innerHTML = '12'
+    //     return '男'
+    //   },
+    //   set (newValue) {
+    //     // 会导致无限递归去设置genter属性，不可取
+    //     genter = newValue
+    //     console.log(1)
+    //   }
+    // })
+    // ------------------响应式设置get 与set----------------------
+    let value = ''
+    Object.defineProperty(obj, 'genter', {
+      get () {
+        console.log('可以进行读取的任何操作')
+        return value
+      },
+      set (newValue) {
+        console.log('可以进行设置的任何操作')
+        value = newValue 
+      }
+    })
+  
+  </script>
+</body>
+</html>
